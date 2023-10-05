@@ -17,24 +17,24 @@
 2번 문항 : 집의 전등에 아두이노를 통해 연결하려면 릴레이를 추가하여 아두이노 5v로 220v등을 제어해야한다. 
 
 ```c
-    int relay = 7
-    void setup() {
-    Serial.begin(9600);
-    pinMode(relay, OUTPUT);
-    }
+int relay = 7
+void setup() {
+Serial.begin(9600);
+pinMode(relay, OUTPUT);
+}
  
-    void loop() {
+void loop() {
  
-    if (Serial.available() > 0) {
+if (Serial.available() > 0) {
     
-     String m = Serial.readStringUntil('\n');
-         if (m == "on") {
-       digitalWrite(relay, HIGH);
-     } else if (m == "off") {
-       digitalWrite(relay, LOW);
+String m = Serial.readStringUntil('\n');
+if (m == "on") {
+digitalWrite(relay, HIGH);
+} else if (m == "off") {
+digitalWrite(relay, LOW);
+         }
      }
-   }
- }
+}
 ```
 
 위의 코드는 릴레이에 7번핀으로 5v 신호를 보내려는 코드이다. 릴레이가 2핀이라 가정하고 아두이노의 GND, 신호선(7번핀)을 맞게 연결해준다.
