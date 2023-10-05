@@ -15,62 +15,62 @@
 2번 문항 : 집의 전등에 아두이노를 통해 연결하려면 릴레이를 추가하여 아두이노 5v로 220v등을 제어해야한다. 
 
 
-```int relay = 7
-void setup() {
-  Serial.begin(9600);
-  pinMode(relay, OUTPUT);
-}
-
-void loop() {
-
-  if (Serial.available() > 0) {
+    int relay = 7
+ void setup() {
+   Serial.begin(9600);
+   pinMode(relay, OUTPUT);
+ }
+ 
+ void loop() {
+ 
+   if (Serial.available() > 0) {
     
-    String m = Serial.readStringUntil('\n');
-        if (m == "on") {
-      digitalWrite(relay, HIGH);
-    } else if (m == "off") {
-      digitalWrite(relay, LOW);
-    }
-  }
-}```
+     String m = Serial.readStringUntil('\n');
+         if (m == "on") {
+       digitalWrite(relay, HIGH);
+     } else if (m == "off") {
+       digitalWrite(relay, LOW);
+     }
+   }
+ }```
 
 위의 코드는 릴레이에 7번핀으로 5v 신호를 보내려는 코드이다. 릴레이가 2핀이라 가정하고 아두이노의 GND, 신호선(7번핀)을 맞게 연결해준다.
 그리고 릴레이의 반대편에는 전구와 그 220v선을 릴레이, 콘센트에 연결해준다.
 그 후 Server와 통신하려면 위의 코드에서 처럼 Serial통신을 통해서 연결해줘야한다. Server쪽으로 와서는
 
-```import processing.net.*;
-import processing.serial.*;
-Server s;
-Client c;
-Serial p;
-void setup() {
-  s = new Server(this, 123);
-  p = new Serial(this, "COM11", 9600);
-}
-String msg="hi";
-void draw() {
-  c = s.available();
-  if (c!=null) {
+    import processing.net.*;
+ import processing.serial.*;
+ Server s;
+ Client c;
+ Serial p;
+ void setup() {
+   s = new Server(this, 123);
+   p = new Serial(this, "COM11", 9600);
+ }
+ String msg="hi";
+ void draw() {
+   c = s.available();
+   if (c!=null) {
     
-    String m = c.readString();
-    if (m.indexOf("GET /")==0) {
-      c.write("HTTP/1.1 200 OK\r\n\r\n");
-      c.write(msg);
-    }
-    if (m.indexOf("PUT /")==0) {
-      int n = m.indexOf("\r\n\r\n")+4; // on-off 위치
-      m = m.substring(n); // on-off 잘라 내는 위치   //
-      m += '\n';           // 표시할 문자
-      p.write(m); // 시리얼 포트로 on-off 보내기 
-      print(m);
-    }
-  }
-  if (p.available()>0) { // 시리얼 데이터 읽기
-    String m = p.readStringUntil('\n');
-    if (m!=null)  msg = m;
-    print(msg);
-  }
-}```
+     String m = c.readString();
+     if (m.indexOf("GET /")==0) {
+       c.write("HTTP/1.1 200 OK\r\n\r\n");
+       c.write(msg);
+     }
+     if (m.indexOf("PUT /")==0) {
+       int n = m.indexOf("\r\n\r\n")+4; // on-off 위치
+       m = m.substring(n); // on-off 잘라 내는 위치   //
+       m += '\n';           // 표시할 문자
+       p.write(m); // 시리얼 포트로 on-off 보내기 
+       print(m);
+     }
+   }
+   if (p.available()>0) { // 시리얼 데이터 읽기
+     String m = p.readStringUntil('\n');
+     if (m!=null)  msg = m;
+     print(msg);
+   }
+ }```
 
 Serial통신을 통해 Sensing, 즉 아두이노 부분과 데이터를 주고 받을 수 있게 만들어준다. 위 처럼 Processing코드를 통해 연결해준다.
 
