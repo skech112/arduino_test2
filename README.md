@@ -16,16 +16,16 @@
 
 2번 문항 : 집의 전등에 아두이노를 통해 연결하려면 릴레이를 추가하여 아두이노 5v로 220v등을 제어해야한다. 
 
-
+```c
     int relay = 7
- void setup() {
-   Serial.begin(9600);
-   pinMode(relay, OUTPUT);
- }
+    void setup() {
+    Serial.begin(9600);
+    pinMode(relay, OUTPUT);
+    }
  
- void loop() {
+    void loop() {
  
-   if (Serial.available() > 0) {
+    if (Serial.available() > 0) {
     
      String m = Serial.readStringUntil('\n');
          if (m == "on") {
@@ -35,14 +35,16 @@
      }
    }
  }
+```
 
 위의 코드는 릴레이에 7번핀으로 5v 신호를 보내려는 코드이다. 릴레이가 2핀이라 가정하고 아두이노의 GND, 신호선(7번핀)을 맞게 연결해준다.
 그리고 릴레이의 반대편에는 전구와 그 220v선을 릴레이, 콘센트에 연결해준다.
 그 후 Server와 통신하려면 위의 코드에서 처럼 Serial통신을 통해서 연결해줘야한다. Server쪽으로 와서는
 
-    import processing.net.*;
- import processing.serial.*;
- Server s;
+```processing
+import processing.net.*;
+import processing.serial.*;
+Server s;
  Client c;
  Serial p;
  void setup() {
@@ -73,6 +75,7 @@
      print(msg);
    }
  }
+```
 
 Serial통신을 통해 Sensing, 즉 아두이노 부분과 데이터를 주고 받을 수 있게 만들어준다. 위 처럼 Processing코드를 통해 연결해준다.
 
